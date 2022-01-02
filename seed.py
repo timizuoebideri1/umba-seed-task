@@ -9,7 +9,7 @@ from decouple import config
 conn = sqlite3.connect(config("SEED_DB_URI"))
 URL = "https://api.github.com/users?per_page={per_page}&page={page}"
 
-
+# requirements
 class UserModel:
     def __init__(self):
         self.cursor = conn.cursor()
