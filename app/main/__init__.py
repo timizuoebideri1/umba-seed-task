@@ -9,4 +9,6 @@ def create_app(configuration):
     app.config.from_object(configuration)
     db.init_app(app)
 
+    from app.users.models import Users
+
     return app
