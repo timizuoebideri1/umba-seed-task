@@ -35,7 +35,7 @@ def fetch_github_users(partition):
     url = URL.format(per_page=per_page, page=page)
     try:
         req = requests.get(url)
-        return [(x.get("id"), x.get("login"), x.get("avatar_url"), x.get("type"), x.get("url")) for x in req.json()]
+        return [(x.get("id"), x.get("login"), x.get("avatar_url"), x.get("type"), x.get("html_url")) for x in req.json()]
     except Exception as e:
         print("Error connection to {}".format(url))
         return None
