@@ -20,9 +20,9 @@ class BaseTestCase(unittest.TestCase):
         self.app_context.pop()
 
 
-def create_user(self):
+def create_user(self, id=1):
     user = Users(
-        id=1, username="test_user", avatar_url="https://test-avatar-url.com",
+        id=id, username="test_user", avatar_url="https://test-avatar-url.com",
         type="test_type", URL="https://test-url.com"
     )
     self.db.session.add(user)

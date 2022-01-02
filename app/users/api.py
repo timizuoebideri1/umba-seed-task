@@ -42,7 +42,7 @@ class UsersApi(Resource):
         pag_queryset = queryset.paginate(page=page, per_page=limit)
 
         return {
-            "count": pag_queryset.total,
+            "total": pag_queryset.total,
             "prev_url": build_url(request.url, request.args, pag_queryset.prev_num),
             "next_url": build_url(request.url, request.args, pag_queryset.next_num),
             "result": [user.serialize() for user in pag_queryset.items]
