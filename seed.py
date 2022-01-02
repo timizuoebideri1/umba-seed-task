@@ -1,26 +1,18 @@
 import argparse
 import itertools
-import sqlite3
+import os
 from concurrent.futures import ProcessPoolExecutor
-
 import requests as requests
-from decouple import config
 
-conn = sqlite3.connect(config("SEED_DB_URI"))
+from sqlalchemy import create_engine
+
+
 URL = "https://api.github.com/users?per_page={per_page}&page={page}"
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DATABASE_PATH = os.path.join(BASE_DIR, 'app/main/database/github_users.db')
 
-# requirements
-class UserModel:
-    def __init__(self):
-        self.cursor = conn.cursor()
-        self.cursor.execute(
-            """CREATE TABLE IF NOT EXISTS github_users (_id INTEGER PRIMARY KEY,
-                id INTEGER, username VARCHAR(150), avatar_url VARCHAR(150), type VARCHAR(150), URL TEXT)""")
-
-    def insert(self, data):
-        query = self.cursor.executemany(
-            "INSERT INTO github_users (id, username, avatar_url, type, URL) VALUES (?, ?, ?, ?, ?);", data)
-        conn.commit()
+engine = create_engine("sqlite:///" + DATABASE_PATH)
+conn = engine.connect()
 
 
 def fetch_github_users_in_parallel(total_users, break_by):
@@ -62,7 +54,6 @@ def partition_no(number, break_by):
 
 
 def main():
-    db = UserModel()  # Initialize Database
     parser = argparse.ArgumentParser()
     parser.add_argument('-t', '--total', help="Number of users to get from GitHub", type=int)
     args = parser.parse_args()
@@ -75,7 +66,10 @@ def main():
 
     if users_json:
         print("Inserting into database .....")
-        db.insert(users_json)
+        conn.execute(
+            "INSERT INTO github_users (id, username, avatar_url, type, URL) VALUES (?, ?, ?, ?, ?);",
+            users_json
+        )
         print("Done Inserting into database .....")
 
 
