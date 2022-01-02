@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Github Users</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<style>
+    .github-users {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .github-users .card {
+        width: 150px;
+        margin: 10px;
+    }
+    .github-users .card-header {
+        padding: 10px;
+    }
+    .github-users .card-header a {
+        color: #fff;
+    }
+    .github-users .card-body {
+        padding: 10px;
+    }
+
+    .github-users .card-body img {
+        width: 100%;
+    }
+</style>
+
+<div class="container">
+    <h2 class="text-center">GitHub Users</h2>
+
+    <nav>
+
+      <ul class="pagination">
+          {% if users.has_prev %}
+            <li class="page-item">
+                <a class="page-link" href="{{url_for('users.home', page=users.prev_num, pagination=limit)}}">
+                    Previous
+                </a>
+            </li>
+          {% endif %}
+
+          {% for page in users.iter_pages(left_edge=1, left_current=2, right_edge=1, right_current=2) %}
+            {% if page %}
+                {% if page == users.page %}
+                    <li class="page-item active">
+                {% else %}
+                    <li class="page-item">
+                {% endif %}
+                        <a class="page-link" href="{{url_for('users.home', page=page, pagination=limit)}}">
+                            {{ page }}
+                        </a>
+                    </li>
+            {% else %}
+              <li class="page-item">
+                  <a class="page-link" href="#">...</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+
+          {% if users.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{url_for('users.home', page=users.next_num, pagination=limit)}}">
+                    Next
+                </a>
+            </li>
+          {% endif %}
+      </ul>
+    </nav>
+
+    <div class="github-users">
+        {% for user in users.items %}
+            <div class="card">
+              <div class="card-header bg-primary">
+                  <a href="{{ user.URL }}">{{user.id}} - {{user.username}}</a>
+              </div>
+              <div class="card-body">
+                  <img src="{{ user.avatar_url }}" alt="">
+              </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>
