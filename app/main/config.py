@@ -23,6 +23,13 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
 
+class TestingConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = get_database_uri(config("TEST_DB_TYPE"), config("TEST_DB"))
+    DEBUG = True
+    TESTING = True
+
+
 configuration = {
-    "development": DevelopmentConfig
+    "development": DevelopmentConfig,
+    "testing": TestingConfig
 }
