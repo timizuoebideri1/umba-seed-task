@@ -10,5 +10,8 @@ def create_app(configuration):
     db.init_app(app)
 
     from app.users.models import Users
+    from app.users.views import user_bp
+
+    app.register_blueprint(user_bp)
 
     return app
