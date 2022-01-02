@@ -1,15 +1,10 @@
 from app.users.models import Users
-from app.users.tests.test_setup import BaseTestCase
+from app.users.tests.test_setup import BaseTestCase, create_user
 
 
 class TestModel(BaseTestCase):
     def test_user_model(self):
-        user = Users(
-            id=1, username="test_user", avatar_url="https://test-avatar-url.com",
-            type="test_type", URL="https://test-url.com"
-        )
-        self.db.session.add(user)
-        self.db.session.commit()
+        create_user(self)
 
         queryset = Users.query.filter_by(id=1).first()
 
